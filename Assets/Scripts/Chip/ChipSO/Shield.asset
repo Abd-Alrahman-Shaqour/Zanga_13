@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partName: Shield
   description: It protects you from getting damaged
-  icon: {fileID: 0}
+  icon: {fileID: 1040577289, guid: 4a1eb2c6be4830849965610c1bed0abf, type: 3}
   chipType: 5
+  rarityType: 0
   value: 1
