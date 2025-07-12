@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: JumpChip
   m_EditorClassIdentifier: 
   chipName: Jump
-  description: 
+  description: O E E A E
   drawback: 
   type: 2
   icon: {fileID: 952340150, guid: 4a1eb2c6be4830849965610c1bed0abf, type: 3}

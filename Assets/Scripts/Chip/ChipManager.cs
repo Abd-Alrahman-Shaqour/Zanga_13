@@ -28,7 +28,23 @@ public class ChipManager : MonoBehaviour
         
     }
 
-#region Getters
+
+    public List<ChipData> equippedChips;
+
+    public void EquipChip(ChipData chip)
+    {
+        if (!equippedChips.Contains(chip))
+            equippedChips.Add(chip);
+    }
+
+    public void RemoveChip(ChipData chip)
+    {
+        equippedChips.Remove(chip);
+    }
+
+
+
+    #region Getters
     public List<Chip> Get_ChipSOList(List<ChipType> _chipTypeList)
     {
         List<Chip> requiredChipList = new List<Chip>();

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SpeedChip
   m_EditorClassIdentifier: 
   chipName: Speed
-  description: 
+  description: O E E A E
   drawback: 
   type: 6
   icon: {fileID: -1519841122, guid: 4a1eb2c6be4830849965610c1bed0abf, type: 3}

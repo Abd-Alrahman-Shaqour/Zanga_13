@@ -2,8 +2,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
+using UnityEngine.EventSystems;
 
-public class ChipUI : MonoBehaviour
+public class ChipUI : MonoBehaviour , IPointerEnterHandler, IPointerExitHandler
 {
     public Image icon;
     public TextMeshProUGUI chipName;
@@ -35,16 +36,15 @@ public class ChipUI : MonoBehaviour
         if (pressed)
         {
 
-            // Prevent duplicate shakes
             if (shakeTween == null || !shakeTween.IsPlaying())
             {
                 shakeTween = transform.DOShakeRotation(
-                    duration: 1f,
-                    strength: new Vector3(0, 0, 5f), // Shake Z-axis like wiggle
+                    duration: 20f,
+                    strength: new Vector3(0, 0, 1f), 
                     vibrato: 10,
                     randomness: 90,
                     fadeOut: false
-                ).SetLoops(-1); // Loop forever
+                ).SetLoops(-1); 
             }
         }
         else
@@ -52,5 +52,15 @@ public class ChipUI : MonoBehaviour
             shakeTween?.Kill();
             transform.rotation = Quaternion.identity;
         }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        ChipHoverController.Show(chipData.description);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        ChipHoverController.Hide();
     }
 }
