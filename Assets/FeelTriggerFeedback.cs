@@ -135,14 +135,22 @@ public class FeelTriggerFeedback : MonoBehaviour
     public float pushDownAmount = 0.2f;
 
     private Vector3 originalPosition;
+    bool canpushdown = true;
+    [SerializeField]bool pushdown = false;
     public void PushDown()
     {
-        Vector3 targetPos = originalPosition + Vector3.down * pushDownAmount;
-        transform.DOMove(targetPos, 0.2f).SetEase(Ease.OutQuad)
+        if (canpushdown && pushdown)
+        {
+            canpushdown = false;
+            Vector3 targetPos = originalPosition + Vector3.down * pushDownAmount;
+            transform.DOMove(targetPos, 0.2f).SetEase(Ease.OutQuad)
             .OnComplete(() =>
             {
                 // Return to original position after a brief moment
-                transform.DOMove(originalPosition, 0.3f).SetEase(Ease.OutBounce);
+                transform.DOMove(originalPosition, 0.9f).SetEase(Ease.OutBounce).OnComplete(() =>
+                { canpushdown = true; });
             });
+        }
+
     }
 }

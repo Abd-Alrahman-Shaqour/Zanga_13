@@ -93,6 +93,7 @@ public class UIManager : MonoBehaviour
         }
         return false;
     }
+
 }
 
 [Serializable]
@@ -106,5 +107,6 @@ public enum UIType
 {
     SplashScreen,
     MainMenu,
-    Settings
+    Settings,
+    Audio
 }
