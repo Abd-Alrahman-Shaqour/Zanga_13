@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partName: OS
   description: Your operating system, if removed, YOU WILL DIE!
-  icon: {fileID: 0}
+  icon: {fileID: 1795699237, guid: 4a1eb2c6be4830849965610c1bed0abf, type: 3}
   chipType: 1
   rarityType: 4
   value: 1

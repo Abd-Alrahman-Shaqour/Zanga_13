@@ -307,7 +307,7 @@ MonoBehaviour:
   chipUIPrefab: {fileID: 9209111699326181659, guid: 30fe0a1b6235f4b43969e421595e49ce,
     type: 3}
   availableChips:
-  - {fileID: 11400000, guid: 97fc7629f0dc5a749a7042d643258dda, type: 2}
+  - {fileID: 11400000, guid: 7d290c4f100a7b54ab3a6a38a0a7d96e, type: 2}
 --- !u!4 &223716713
 Transform:
   m_ObjectHideFlags: 0
@@ -2836,11 +2836,11 @@ MonoBehaviour:
   allChipsList: []
   chip_BGList: []
   equippedChips:
-  - {fileID: 11400000, guid: ff65799de5bae3642b30f94c54176c9c, type: 2}
-  - {fileID: 11400000, guid: 2014355ce6850a746983fa776763c8d2, type: 2}
-  - {fileID: 11400000, guid: 6a2d4f9c5d628014596c3eaee2996be5, type: 2}
-  - {fileID: 11400000, guid: 0225579781bd76740ab6e911b1225ed6, type: 2}
-  - {fileID: 11400000, guid: cd6194fe1c82f064b85fcae6d05bc4ac, type: 2}
+  - {fileID: 11400000, guid: c378186e3b7988045b30c29b7220831f, type: 2}
+  - {fileID: 11400000, guid: d4f990d5f0805fb4e9a9c39784fe6d60, type: 2}
+  - {fileID: 11400000, guid: b14cefbc20b08c546a6e25edc2f41f5b, type: 2}
+  - {fileID: 11400000, guid: cfc69f3fe4450ca439ba90fbcf8e8b2c, type: 2}
+  - {fileID: 11400000, guid: 231c2d929b473d1499f652adbd5efa6c, type: 2}
 --- !u!4 &1935645168
 Transform:
   m_ObjectHideFlags: 0
@@ -3022,7 +3022,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f611f144034e65e458ad44901b99fb35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactE: {fileID: 866040608}
+  interactE: {fileID: 598955143}
   chipStationUI: {fileID: 223716712}
 --- !u!4 &1993609506
 Transform:

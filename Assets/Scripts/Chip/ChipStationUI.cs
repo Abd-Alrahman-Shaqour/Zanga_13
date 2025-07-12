@@ -13,12 +13,12 @@ public class ChipStationUI : MonoBehaviour
     private ChipUI selectedUI;
 
 
-    private ChipData selectedChip;
+    private Chip selectedChip;
     private ChipSource selectedChipSource;
 
     public enum ChipSource { Player, Available }
 
-    public List<ChipData> availableChips = new();
+    public List<Chip> availableChips = new();
 
 /*    private void Start()
     {
@@ -27,6 +27,9 @@ public class ChipStationUI : MonoBehaviour
 
     public void PopulateChips()
     {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
         foreach (Transform t in playerChipSlots) DestroyChildren(t);
         foreach (Transform t in availableChipSlots) DestroyChildren(t);
 
@@ -53,7 +56,7 @@ public class ChipStationUI : MonoBehaviour
         }
     }
 
-    public void OnChipUIClicked(ChipUI chipUI, ChipData chip)
+    public void OnChipUIClicked(ChipUI chipUI, Chip chip)
     {
         bool isPlayerSide = IsPlayerChip(chip);
 
@@ -82,7 +85,7 @@ public class ChipStationUI : MonoBehaviour
         }
     }
 
-    void SwapWithEffect(ChipData a, ChipData b, ChipUI aUI, ChipUI bUI)
+    void SwapWithEffect(Chip a, Chip b, ChipUI aUI, ChipUI bUI)
     {
         Vector3 aStartPos = aUI.transform.position;
         Vector3 bStartPos = bUI.transform.position;
@@ -132,5 +135,5 @@ public class ChipStationUI : MonoBehaviour
     }
 
 
-    bool IsPlayerChip(ChipData chip) => playerChipManager.equippedChips.Contains(chip);
+    bool IsPlayerChip(Chip chip) => playerChipManager.equippedChips.Contains(chip);
 }

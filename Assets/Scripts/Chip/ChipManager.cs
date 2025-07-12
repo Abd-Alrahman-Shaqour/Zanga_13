@@ -29,15 +29,15 @@ public class ChipManager : MonoBehaviour
     }
 
 
-    public List<ChipData> equippedChips;
+    public List<Chip> equippedChips;
 
-    public void EquipChip(ChipData chip)
+    public void EquipChip(Chip chip)
     {
         if (!equippedChips.Contains(chip))
             equippedChips.Add(chip);
     }
 
-    public void RemoveChip(ChipData chip)
+    public void RemoveChip(Chip chip)
     {
         equippedChips.Remove(chip);
     }

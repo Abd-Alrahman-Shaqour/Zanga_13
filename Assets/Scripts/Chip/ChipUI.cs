@@ -10,13 +10,13 @@ public class ChipUI : MonoBehaviour , IPointerEnterHandler, IPointerExitHandler
     public TextMeshProUGUI chipName;
     public TextMeshProUGUI chipDescription;
 
-    public ChipData chipData;
+    public Chip chipData;
     private ChipStationUI station;
 
     private Tween shakeTween;
 
 
-    public void Setup(ChipData data, ChipStationUI station)
+    public void Setup(Chip data, ChipStationUI station)
     {
         this.chipData = data;
         this.station = station;
