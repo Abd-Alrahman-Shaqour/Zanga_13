@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
-    path: Assets/Scenes/Development/CharacterController.unity
-    guid: 3f66ad17049d81049befc38355723472
+    path: Assets/PolygonSciFiCity/Scenes/Demo.unity
+    guid: f3b9e9dadf5931045b77452c62c3cdbc
   m_configObjects: {}
