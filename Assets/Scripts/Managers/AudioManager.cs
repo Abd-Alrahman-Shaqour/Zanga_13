@@ -7,11 +7,17 @@ using DG.Tweening;
 
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
     #region Instance | Singleton
     private static AudioManager _instance;
+
+    [Header("Audio Mixer")]
+    public AudioMixer audioMixer;
+
+
     public static AudioManager Instance
 	{
 		get
@@ -40,9 +46,12 @@ public class AudioManager : MonoBehaviour
 #region Consts
     public static string SOUND_SETTINGS_KEY = "soundsSettings";
     public static string MUSIC_SETTINGS_KEY = "musicSettings";
-#endregion --- Consts ---
 
-#region Vars
+    private const string MUSIC_KEY = "MusicVolume";
+    private const string SFX_KEY = "SFXVolume";
+    #endregion --- Consts ---
+
+    #region Vars
     [Header("Main Components"), Space]
     [SerializeField] AudioSource BGM_AudioSource;
     [SerializeField] AudioSource SFX_AudioSource;
@@ -67,9 +76,35 @@ public class AudioManager : MonoBehaviour
         DontDestroy();
     }
 
+
+
+    public void SetMusicVolume(float value)
+    {
+        float db = Mathf.Log10(Mathf.Clamp(value, 0.0001f, 1f)) * 20;
+        audioMixer.SetFloat("MusicVolume", db);
+        PlayerPrefs.SetFloat(MUSIC_KEY, value);
+    }
+
+    public void SetSFXVolume(float value)
+    {
+        float db = Mathf.Log10(Mathf.Clamp(value, 0.0001f, 1f)) * 20;
+        audioMixer.SetFloat("SFXVolume", db);
+        PlayerPrefs.SetFloat(SFX_KEY, value);
+    }
+
+    public void LoadVolumeSettings()
+    {
+        float music = PlayerPrefs.GetFloat(MUSIC_KEY, 1f);
+        float sfx = PlayerPrefs.GetFloat(SFX_KEY, 1f);
+
+        SetMusicVolume(music); // <- Applies AND saves (again)
+        SetSFXVolume(sfx);
+    }
+
     void Start()
     {
         InitSavedSettings();
+        LoadVolumeSettings();
         // PlayMusic(BGM_AudioElements.FirstOrDefault().audioName);
     }
 
@@ -201,7 +236,9 @@ public class AudioManager : MonoBehaviour
         PlayerPrefs.SetInt(MUSIC_SETTINGS_KEY, _state ? 1 : 0);
         isMusicActive = _state;
 
-        BGM_AudioSource.volume = isMusicActive ? maxVolume : 0;
+        //BGM_AudioSource.volume = isMusicActive ? maxVolume : 0;
+        SetMusicVolume(isMusicActive ? PlayerPrefs.GetFloat(MUSIC_KEY, 1f) : 0.0001f);
+
     }
 
     public bool Get_SoundSettings()
