@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
@@ -116,6 +118,30 @@ namespace StarterAssets
         public int jumpCount = 0;
         public int jumpLimit = 1;
 
+        // [Header("Dash Settings")]
+        // public float dashForce = 10f;
+        // public float dashDuration = 0.2f;
+        // public float dashCooldown = 1f;
+        // public bool canDash = true;
+
+        // private bool isDashing = false;
+        // private float dashTimer;
+        // private float dashCooldownTimer;
+        // private Vector3 dashDirection;
+
+        [Header("Shield abilities")]
+        [SerializeField] List<GameObject> shield_GoList;
+
+        [Header("Main Chip abilities")]
+        [SerializeField] int has_OS = 0;
+        [SerializeField] int has_Jump = 0;
+        [SerializeField] int has_Vision = 0;
+        [SerializeField] int has_Shield = 0;
+        [SerializeField] int has_Logic = 0;
+
+        [Header("Other Chip abilities")]
+        [SerializeField] int has_Overclocking = 0;
+
         private bool IsCurrentDeviceMouse
         {
             get
@@ -127,7 +153,6 @@ namespace StarterAssets
 #endif
             }
         }
-
 
         private void Awake()
         {
@@ -161,13 +186,17 @@ namespace StarterAssets
         private void Update()
         {
             _hasAnimator = _animator != null;
-            
+
+            // Handle jump input before checking grounded state
+            if(Input.GetKeyDown(KeyCode.Space))
+                Jump();
+
+            // if (Input.GetKeyDown(KeyCode.LeftShift))
+            //     TryDash();
+
             GroundedCheck();
             JumpAndGravity();
             Move();
-
-            if(Input.GetKeyDown(KeyCode.Space))
-                Jump();
         }
 
         private void LateUpdate()
@@ -198,8 +227,10 @@ namespace StarterAssets
                 _animator.SetBool(_animIDGrounded, Grounded);
             }
 
-            if(Grounded)
-            {jumpCount = 0;}
+            if (Grounded && _verticalVelocity <= 0f)
+            {
+                jumpCount = 0;
+            }
         }
 
         private void CameraRotation()
@@ -223,12 +254,22 @@ namespace StarterAssets
                 _cinemachineTargetYaw, 0.0f);
         }
 
+        public float SprintAcceleration = 0.01f;
+
         private void Move()
         {
-            // set target speed based on move speed, sprint speed and if sprint is pressed
-            float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
-
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
+            if(_input.sprint)
+            {
+                SprintAcceleration += 0.01f + has_Overclocking * 0.01f * 2;
+            }
+            else
+            {
+                SprintAcceleration = 0.01f + has_Overclocking * 0.01f * 2;
+            }
+
+            // set target speed based on move speed, sprint speed and if sprint is pressed
+            float targetSpeed = _input.sprint ? SprintSpeed + (has_Overclocking * SprintSpeed * 1.5f) + SprintAcceleration : MoveSpeed + (has_Overclocking * MoveSpeed * 2);
 
             // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is no input, set the target speed to 0
@@ -269,6 +310,7 @@ namespace StarterAssets
             {
                 _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
                                   _mainCamera.transform.eulerAngles.y;
+                                  
                 float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
                     RotationSmoothTime);
 
@@ -292,17 +334,14 @@ namespace StarterAssets
 
         void Jump()
         {
-            Grounded = false;
-
-            canJump = jumpCount < jumpLimit;
+            canJump = has_Jump > 0 && jumpCount < jumpLimit;
 
             if(canJump)
             {
-                jumpCount++;
-
                 // Jump
                 if (_jumpTimeoutDelta <= 0.0f)
                 {
+
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
                     _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
 
@@ -312,6 +351,9 @@ namespace StarterAssets
                         _animator.SetBool(_animIDJump, true);
                     }
                 }
+
+                Grounded = false;
+                jumpCount++;
             }
         }
 
@@ -409,6 +451,40 @@ namespace StarterAssets
             if (animationEvent.animatorClipInfo.weight > 0.5f)
             {
                 AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_controller.center), FootstepAudioVolume);
+            }
+        }
+
+        public void AssignChipsValues(List<Chip> _chipList)
+        {
+            has_OS              = _chipList.Where(chip => chip.chipType == ChipType.OS).Count();
+            has_Jump            = _chipList.Where(chip => chip.chipType == ChipType.Jump).Count();
+            has_Vision          = _chipList.Where(chip => chip.chipType == ChipType.Vision).Count();
+            has_Shield          = _chipList.Where(chip => chip.chipType == ChipType.Shield).Count();
+            has_Logic           = _chipList.Where(chip => chip.chipType == ChipType.Logic).Count();
+            has_Overclocking    = _chipList.Where(chip => chip.chipType == ChipType.Overclock).Count();
+
+            ActivateChips();
+        }
+
+        public void ActivateChips()
+        {
+            if(has_Overclocking > 0)
+            {
+                has_Jump        = has_Jump   * (has_Jump + 1);
+                has_Shield      = has_Shield * (has_Shield + 1);    
+                has_Logic       = 1;
+            }
+
+            jumpLimit           = has_Jump;
+
+            foreach(GameObject shield in shield_GoList)
+            {
+                shield.SetActive(false);
+            }
+            
+            for(int i = 0; i < has_Shield; i++)
+            {
+                shield_GoList[i].SetActive(true);
             }
         }
     }
