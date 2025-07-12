@@ -106,4 +106,5 @@ public enum UIType
 {
     SplashScreen,
     MainMenu,
+    Settings
 }
