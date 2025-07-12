@@ -8,6 +8,7 @@ public class GameManager : SingletonPersistent<GameManager>
     public GameState state;
     public static event Action<GameState> OnGameStateChanged;
     // public PlayerCore PlayerCore { get; set;}
+    public TransitionManager TransitionManager;
 
     protected override void Awake()
     {
@@ -24,7 +25,7 @@ public class GameManager : SingletonPersistent<GameManager>
 
     private void Start()
     {
-        UpdateGameState(GameState.MainMenu);
+        //UpdateGameState(GameState.MainMenu);
     }
 
     public void UpdateGameState(GameState newState)
@@ -63,7 +64,7 @@ public class GameManager : SingletonPersistent<GameManager>
         //_saveManager.SerializeJson(PlayerCore.playerStats);
 
     }
-        public void PauseGame()
+    public void PauseGame()
     {
         UpdateGameState(GameState.Paused);
     }
@@ -76,7 +77,7 @@ public class GameManager : SingletonPersistent<GameManager>
     {
         UpdateGameState(GameState.GameOver);
     }
-        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         Debug.Log($"Scene loaded: {scene.name}");
 
@@ -84,11 +85,15 @@ public class GameManager : SingletonPersistent<GameManager>
         if (scene.name.Contains("Level_"))
         {
             UpdateGameState(GameState.GamePlay);
+            AudioManager.Instance.PlayMusic("Game_BGM");
+
         }
         else if (scene.name == "MainMenu")
         {
             UpdateGameState(GameState.MainMenu);
+            AudioManager.Instance.PlayMusic("MainMenu_BGM");
         }
+
     }
 
     private void OnSceneUnloaded(Scene scene)
@@ -96,10 +101,13 @@ public class GameManager : SingletonPersistent<GameManager>
         Debug.Log($"Scene unloaded: {scene.name}");
     }
 
+
+
 }
 
 public enum GameState
 {
+    Init,
     MainMenu,
     Paused,
     GamePlay,
