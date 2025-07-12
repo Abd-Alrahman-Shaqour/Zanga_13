@@ -50,19 +50,6 @@ public class GameManager : SingletonPersistent<GameManager>
         OnGameStateChanged?.Invoke(newState);
     }
 
-    public void LeveCompleted()
-    {
-
-    }
-
-    public void SaveGame()
-    {
-        // PlayerCore ??= FindObjectOfType<PlayerCore>();
-
-        //if (PlayerCore != null)
-        //_saveManager.SerializeJson(PlayerCore.playerStats);
-
-    }
         public void PauseGame()
     {
         UpdateGameState(GameState.Paused);
