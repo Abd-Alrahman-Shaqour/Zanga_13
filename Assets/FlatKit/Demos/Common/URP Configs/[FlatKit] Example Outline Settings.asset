@@ -82,4 +82,4 @@ MonoBehaviour:
   renderEvent: 500
   outlineOnly: 0
   applyInSceneView: 1
-  effectMaterial: {fileID: 0}
+  effectMaterial: {fileID: -3130267085085746722}
