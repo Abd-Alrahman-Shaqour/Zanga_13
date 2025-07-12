@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Hexagonal Portal
   m_EditorClassIdentifier: 
   cullMode: 0
-  wrapMode: 0
+  wrapMode: 1
   renderOnTop: 0
   grabPass: 0
   alwaysOn: 1
@@ -71,7 +71,7 @@ MonoBehaviour:
   noiseAmount: 0
   distortion: 1
   distortionAmplitude: {x: 1, y: 1}
-  distortionFrequency: 10
+  distortionFrequency: 1
   distortionAnimationSpeed: 1
   distortionFalloff: 5
   distortionRimPower: 0
@@ -86,15 +86,15 @@ MonoBehaviour:
   scanLinesScreenSpace: 0
   scanLinesSize: 25
   scanLinesAnimationSpeed: 0
-  scanLinesColor: {r: 1, g: 1, b: 1, a: 1}
+  scanLinesColor: {r: 1, g: 0, b: 0, a: 1}
   scanLinesMaxDistance: 2
   hazeIntensity: 8.73
   hazeThreshold: 4.5
   hazeMode: 0
   hazeGradient:
     serializedVersion: 2
-    key0: {r: 1, g: 0, b: 0.45808077, a: 1}
-    key1: {r: 1, g: 0, b: 0.45808077, a: 1}
+    key0: {r: 0.3679245, g: 0, b: 0.22272259, a: 1}
+    key1: {r: 1, g: 0, b: 0.07093382, a: 1}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 0}
@@ -121,7 +121,7 @@ MonoBehaviour:
     m_ColorSpace: 0
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
-  hazeScale: {x: 0.2, y: 0.2}
+  hazeScale: {x: 1, y: 1}
   hazeSpeed: 1
   frostIntensity: 0
   frostSpread: 2.5
