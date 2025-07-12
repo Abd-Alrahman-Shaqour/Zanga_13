@@ -15,7 +15,7 @@ MonoBehaviour:
   resolution: 118
   renderEvent: 300
   applyInSceneView: 0
-  effectMaterial: {fileID: 0}
+  effectMaterial: {fileID: 3723506462162492137}
 --- !u!21 &3723506462162492137
 Material:
   serializedVersion: 8
@@ -54,6 +54,6 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _PixelSize: 0.0020833334
+    - _PixelSize: 0.008474576
     m_Colors: []
   m_BuildTextureStacks: []
