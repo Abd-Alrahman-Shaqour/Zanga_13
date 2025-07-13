@@ -71,19 +71,7 @@ public class LinearCameraDolly : MonoBehaviour
     
     void Update()
     {
-        // Handle input
-        if (Input.GetKeyDown(startKey))
-        {
-            StartDolly();
-        }
-        else if (Input.GetKeyDown(stopKey))
-        {
-            StopDolly();
-        }
-        else if (Input.GetKeyDown(resetKey))
-        {
-            ResetDolly();
-        }
+
         
         // Handle look at target
         if (lookAtTarget != null && !isMoving)
