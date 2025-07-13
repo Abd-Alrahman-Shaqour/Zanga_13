@@ -8,14 +8,12 @@ public class Shield : MonoBehaviour
 
     void OEnable()
     {
-        animator.Play("DoNothing");
-
-        transform.localScale = Vector3.one * (0.15f + (transform.GetSiblingIndex() * 0.05f));
+      
     }
     
     public void BreakShield()
     {
-        animator.Play("BreakShield");
+       this.gameObject.SetActive(false);
     }
 
     public void SetInactive()

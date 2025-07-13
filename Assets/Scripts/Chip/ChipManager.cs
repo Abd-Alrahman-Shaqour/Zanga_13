@@ -1,4 +1,5 @@
 using DG.Tweening;
+using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,7 @@ public class ChipManager : MonoBehaviour
 
     [Header("Chip properties")]
     [SerializeField] List<Sprite> chip_BGList;
+    [SerializeField] ThirdPersonController_RobotSphere thirdPersonController_RobotSphere;
 
     void Start()
     {
@@ -35,7 +37,7 @@ public class ChipManager : MonoBehaviour
     public List<Chip> equippedChips;
 
     [Header("Controllers UI")]
-    [SerializeField] GameObject controllersPanel;
+    [SerializeField] GameObject controllersPanel, damageControllersPanel;
 
 
     public void EquipChip(Chip chip)
@@ -59,17 +61,17 @@ public class ChipManager : MonoBehaviour
 
         if (!hasOS)
         {
-            Debug.LogWarning("Missing OS chip – player dies.");
+            Debug.LogWarning("Missing OS chip ï¿½ player dies.");
             // TODO: Handle death
             return;
         }
 
         if (!hasLogic)
         {
-            Debug.LogWarning("Missing Logic chip – scramble controls.");
-            controllersPanel.SetActive(true);
+            Debug.LogWarning("Missing Logic chip ï¿½ scramble controls.");
+            damageControllersPanel.SetActive(true);
 
-            var cg = controllersPanel.GetComponent<CanvasGroup>();
+            var cg = damageControllersPanel.GetComponent<CanvasGroup>();
             cg.DOKill(); // Stop any existing tweens
             cg.alpha = 1;
 
@@ -79,28 +81,34 @@ public class ChipManager : MonoBehaviour
         }
         else
         {
+            controllersPanel.SetActive(true);
+
             // Optional: stop flicker and hide if Logic chip is back
-            controllersPanel.GetComponent<CanvasGroup>()?.DOKill();
-            controllersPanel.SetActive(false);
+            damageControllersPanel.GetComponent<CanvasGroup>()?.DOKill();
+            damageControllersPanel.SetActive(false);
         }
 
         if (!hasVision)
         {
-            Debug.LogWarning("Missing Vision chip – apply blindness/dark effect.");
-            // TODO: Darken screen or limit vision
+            VisualChipController.Instance.OnVisualChipRemoved();
+        }
+        else
+        {
+            VisualChipController.Instance.OnVisualChipReceived();
         }
 
         if (!hasJump)
         {
-            Debug.LogWarning("Missing Jump chip – disable jumping.");
+            Debug.LogWarning("Missing Jump chip ï¿½ disable jumping.");
             // TODO: Disable jump input
         }
 
         if (!hasShield)
         {
-            Debug.Log("No shield – player vulnerable.");
+            Debug.Log("No shield ï¿½ player vulnerable.");
             // Optional effect
         }
+        thirdPersonController_RobotSphere.AssignChipsValues(equippedChips);
     }
 
 

@@ -29,8 +29,7 @@ public class VisualChipController : MonoBehaviour
     {
         if (urpAsset == null) return;
         
-        if (currentRenderScale < 1.0f)
-        {
+      
             urpAsset.renderScale = 0.1f;
             
             DOTween.To(
@@ -39,7 +38,7 @@ public class VisualChipController : MonoBehaviour
                 1.0f,
                 1.0f
             );
-        }
+       
     }
     
     public void OnVisualChipRemoved()

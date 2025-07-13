@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1311132897822959506}
   - component: {fileID: 5677887482429792772}
   - component: {fileID: 2508086111295884475}
+  - component: {fileID: 834337043137081864}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -99,12 +100,24 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &834337043137081864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2187974522175204861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09a13fcd3ac099649ae0db52c6aaa981, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3530566278063955467
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -152,6 +165,11 @@ PrefabInstance:
     - target: {fileID: 4307534541420894, guid: beeb4c311e48ba14cb1d92a034a553be, type: 3}
       propertyPath: m_LocalRotation.z
       value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 64466599557609954, guid: beeb4c311e48ba14cb1d92a034a553be,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
