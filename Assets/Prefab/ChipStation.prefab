@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 717936938218642219}
   - component: {fileID: 4728430153094147304}
   - component: {fileID: 2601033860155522239}
+  - component: {fileID: 3836704347185937523}
   m_Layer: 0
   m_Name: ChipStation
   m_TagString: Untagged
@@ -51,6 +52,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   availableChipTypes: 010000000200000004000000
   avaiableChips: []
+  chipStationUI: {fileID: 3836704347185937523}
+  station: {fileID: 0}
+  interactE: {fileID: 0}
 --- !u!65 &2601033860155522239
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -72,6 +76,34 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 5.643051, y: 3.7934847, z: 3.6786118}
   m_Center: {x: 2.522625, y: 1.3967423, z: 0.26981735}
+--- !u!114 &3836704347185937523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1132921045207929860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ed205c78e4ef0f429ef2d991bde3c75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerChipManager: {fileID: 0}
+  playerChipSlots:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  availableChipSlots:
+  - {fileID: 0}
+  chipUIPrefab: {fileID: 9209111699326181659, guid: 30fe0a1b6235f4b43969e421595e49ce,
+    type: 3}
+  availableChips:
+  - {fileID: 11400000, guid: cfc69f3fe4450ca439ba90fbcf8e8b2c, type: 2}
+  - {fileID: 11400000, guid: d4f990d5f0805fb4e9a9c39784fe6d60, type: 2}
+  - {fileID: 11400000, guid: 231c2d929b473d1499f652adbd5efa6c, type: 2}
+  - {fileID: 11400000, guid: b14cefbc20b08c546a6e25edc2f41f5b, type: 2}
 --- !u!1001 &285264039584031699
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -8,6 +8,13 @@ public class ChipStation : MonoBehaviour
     [SerializeField] List<ChipType> availableChipTypes;
     [SerializeField] List<Chip> avaiableChips;
 
+    [Header("Station")]
+    [SerializeField] ChipStationUI chipStationUI;
+    [SerializeField] GameObject station,interactE;
+
+    bool canOpenStation;
+
+
     void Start()
     {
         Initialize();
@@ -18,11 +25,26 @@ public class ChipStation : MonoBehaviour
         avaiableChips = ChipManager.Instance.Get_ChipSOList(availableChipTypes);
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.E) && canOpenStation)
+        {
+            Debug.LogError("Station Opened");
+            station.SetActive(true);
+            chipStationUI.PopulateChips();
+        }
+    }
+
+
     void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player")
         {
-            Debug.Log("Player entered ChipStation area");
+            //chipStationUI.gameObject = 
+            canOpenStation = true;
+            interactE.SetActive(true);
+
+            Debug.LogError("Player entered ChipStation area");
         }
     }
 
@@ -30,7 +52,12 @@ public class ChipStation : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            Debug.Log("Player exited ChipStation area");
+            canOpenStation = false;
+            interactE.SetActive(false);
+            station.SetActive(false);
+
+
+            Debug.LogError("Player exited ChipStation area");
         }
     }
 
