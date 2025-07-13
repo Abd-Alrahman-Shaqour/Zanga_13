@@ -13,29 +13,18 @@ public class IntroController : MonoBehaviour
     public float fadeDuration = 1f;       
     public float messageDuration = 2f;    
 
-    //public CanvasGroup canvasGroup;
     private bool canContinue = false;
     [SerializeField] ChipStationUI chipStationUI;
-    [SerializeField] GameObject introPanel,chipsPanel;
-    //[SerializeField] List<Chip> initialChips;
+    [SerializeField] GameObject introPanel,chipsPanel, exitButton;
     [SerializeField]ChipManager chipManager;
 
-    //[SerializeField] GameObject movementControllerPanel;
 
 
-    void Awake()
-    {
-        //canvasGroup = displayText.GetComponent<CanvasGroup>();
-/*        if (canvasGroup == null)
-        {
-            canvasGroup = displayText.gameObject.AddComponent<CanvasGroup>();
-        }*/
-    }
+
 
     void Start()
     {
         continueText.gameObject.SetActive(false);
-        //canvasGroup.alpha = 0;
         StartCoroutine(ShowMessagesWithFade());
     }
 
@@ -78,13 +67,11 @@ public class IntroController : MonoBehaviour
     }
     IEnumerator RevealChipsSequence()
     {
-        //introPanel.SetActive(false);
         displayText.gameObject.SetActive(false);
         continueText.gameObject.SetActive(false);
         chipsPanel.SetActive(true);
 
         chipsPanel.GetComponent<CanvasGroup>().alpha = 0f;
-        //canvasGroup.alpha = 0;
 
         List<Chip> chipsToEquip = new List<Chip>(chipStationUI.availableChips);
 
@@ -108,17 +95,16 @@ public class IntroController : MonoBehaviour
             chipStationUI.PopulateChips();
             introPanel.SetActive(false);
 
-/*            if (chip.partName.Contains("Logic"))
+            if (chip.partName.Contains("Logic"))
             {
-                movementControllerPanel.SetActive(true);
-            }*/
+                exitButton.SetActive(true);
+            }
 
             yield return new WaitForSeconds(fadeDuration + 2f);
         }
 
         displayText.text = "";
     }
-
 
 
 }

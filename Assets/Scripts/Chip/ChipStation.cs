@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ChipStation : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class ChipStation : MonoBehaviour
     [Header("Station")]
     [SerializeField] ChipStationUI chipStationUI;
     [SerializeField] GameObject station,interactE;
+    [SerializeField] Button exploreLevelButton;
+    [SerializeField] LinearCameraDolly linearCameraDolly;
 
     bool canOpenStation;
 
@@ -40,7 +43,8 @@ public class ChipStation : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            //chipStationUI.gameObject = 
+            exploreLevelButton.onClick.AddListener(linearCameraDolly.StartDolly);
+
             canOpenStation = true;
             interactE.SetActive(true);
 
@@ -52,6 +56,8 @@ public class ChipStation : MonoBehaviour
     {
         if (other.tag == "Player")
         {
+            exploreLevelButton.onClick.RemoveListener(linearCameraDolly.StartDolly);
+
             canOpenStation = false;
             interactE.SetActive(false);
             station.SetActive(false);
