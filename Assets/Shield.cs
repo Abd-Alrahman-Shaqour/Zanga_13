@@ -10,7 +10,7 @@ public class Shield : MonoBehaviour
     {
         animator.Play("DoNothing");
 
-        transform.localScale = Vector3.one * (0.15f + (transform.GetSiblingIndex() * 0.05f));
+       transform.localScale = Vector3.one * (0.15f + ((transform.GetSiblingIndex() + 1) * 0.05f));
     }
     
     public void BreakShield()

@@ -4,19 +4,15 @@ using UnityEngine;
 public class Damaging : MonoBehaviour
 {
     private Collider col;
-    private Renderer rend;
-    private Material mat;
-    private float originalAlpha;
+    private Vector3 originalScale;
     private bool isRecharging = false;
     
     void Start()
     {
         col = GetComponent<Collider>();
-        rend = GetComponent<Renderer>();
-        mat = rend.material;
         
-        // Store original alpha value
-        originalAlpha = mat.color.a;
+        // Store original scale
+        originalScale = transform.localScale;
     }
     
     void OnTriggerEnter(Collider other)
@@ -24,7 +20,7 @@ public class Damaging : MonoBehaviour
         if (other.tag == "Player" && !isRecharging)
         {
             other.GetComponent<Damageable>().TakeDamage();
-            StartCoroutine(FadeOutAndRecharge());
+            StartCoroutine(ScaleDownAndRecharge());
         }
     }
 
@@ -36,39 +32,35 @@ public class Damaging : MonoBehaviour
         }
     }
     
-    IEnumerator FadeOutAndRecharge()
+    IEnumerator ScaleDownAndRecharge()
     {
         isRecharging = true;
         
         // Disable collider
         col.enabled = false;
         
-        // Fade out over 0.5 seconds
-        float fadeTime = 0.5f;
+        // Scale down over 0.5 seconds
+        float scaleTime = 0.5f;
         float elapsedTime = 0f;
         
-        while (elapsedTime < fadeTime)
+        while (elapsedTime < scaleTime)
         {
             elapsedTime += Time.deltaTime;
-            float alpha = Mathf.Lerp(originalAlpha, 0f, elapsedTime / fadeTime);
-            Color newColor = mat.color;
-            newColor.a = alpha;
-            mat.color = newColor;
+            float scale = Mathf.Lerp(1f, 0f, elapsedTime / scaleTime);
+            transform.localScale = originalScale * scale;
             yield return null;
         }
         
         // Wait for remaining time (2.5 seconds)
         yield return new WaitForSeconds(2.5f);
         
-        // Fade back in over 0.5 seconds
+        // Scale back up over 0.5 seconds
         elapsedTime = 0f;
-        while (elapsedTime < fadeTime)
+        while (elapsedTime < scaleTime)
         {
             elapsedTime += Time.deltaTime;
-            float alpha = Mathf.Lerp(0f, originalAlpha, elapsedTime / fadeTime);
-            Color newColor = mat.color;
-            newColor.a = alpha;
-            mat.color = newColor;
+            float scale = Mathf.Lerp(0f, 1f, elapsedTime / scaleTime);
+            transform.localScale = originalScale * scale;
             yield return null;
         }
         
