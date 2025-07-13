@@ -13,29 +13,29 @@ public class IntroController : MonoBehaviour
     public float fadeDuration = 1f;       
     public float messageDuration = 2f;    
 
-    public CanvasGroup canvasGroup;
+    //public CanvasGroup canvasGroup;
     private bool canContinue = false;
     [SerializeField] ChipStationUI chipStationUI;
     [SerializeField] GameObject introPanel,chipsPanel;
     //[SerializeField] List<Chip> initialChips;
     [SerializeField]ChipManager chipManager;
 
-    [SerializeField] GameObject movementControllerPanel;
+    //[SerializeField] GameObject movementControllerPanel;
 
 
     void Awake()
     {
         //canvasGroup = displayText.GetComponent<CanvasGroup>();
-        if (canvasGroup == null)
+/*        if (canvasGroup == null)
         {
             canvasGroup = displayText.gameObject.AddComponent<CanvasGroup>();
-        }
+        }*/
     }
 
     void Start()
     {
         continueText.gameObject.SetActive(false);
-        canvasGroup.alpha = 0;
+        //canvasGroup.alpha = 0;
         StartCoroutine(ShowMessagesWithFade());
     }
 
@@ -108,10 +108,10 @@ public class IntroController : MonoBehaviour
             chipStationUI.PopulateChips();
             introPanel.SetActive(false);
 
-            if (chip.partName.Contains("Logic"))
+/*            if (chip.partName.Contains("Logic"))
             {
                 movementControllerPanel.SetActive(true);
-            }
+            }*/
 
             yield return new WaitForSeconds(fadeDuration + 2f);
         }

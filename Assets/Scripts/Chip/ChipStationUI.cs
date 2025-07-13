@@ -47,6 +47,9 @@ public class ChipStationUI : MonoBehaviour
             var ui = Instantiate(chipUIPrefab, availableChipSlots[0]);
             ui.Setup(chip, this);
         }
+
+        playerChipManager.UpdateChips();
+
     }
 
     private void DestroyChildren(Transform parent)

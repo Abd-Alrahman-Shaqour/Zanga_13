@@ -1,5 +1,7 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ChipManager : MonoBehaviour
@@ -29,7 +31,12 @@ public class ChipManager : MonoBehaviour
     }
 
 
+    [Header("Equipped Chips")]
     public List<Chip> equippedChips;
+
+    [Header("Controllers UI")]
+    [SerializeField] GameObject controllersPanel;
+
 
     public void EquipChip(Chip chip)
     {
@@ -41,6 +48,61 @@ public class ChipManager : MonoBehaviour
     {
         equippedChips.Remove(chip);
     }
+
+    public void UpdateChips()
+    {
+        bool hasOS = equippedChips.Any(chip => chip.partName == "OS");
+        bool hasLogic = equippedChips.Any(chip => chip.partName == "Logic");
+        bool hasVision = equippedChips.Any(chip => chip.partName == "Vision");
+        bool hasJump = equippedChips.Any(chip => chip.partName == "Jump" || chip.partName == "Vertical Agility");
+        bool hasShield = equippedChips.Any(chip => chip.partName == "Shield");
+
+        if (!hasOS)
+        {
+            Debug.LogWarning("Missing OS chip – player dies.");
+            // TODO: Handle death
+            return;
+        }
+
+        if (!hasLogic)
+        {
+            Debug.LogWarning("Missing Logic chip – scramble controls.");
+            controllersPanel.SetActive(true);
+
+            var cg = controllersPanel.GetComponent<CanvasGroup>();
+            cg.DOKill(); // Stop any existing tweens
+            cg.alpha = 1;
+
+            cg.DOFade(0.3f, 0.2f)
+              .SetLoops(-1, LoopType.Yoyo)
+              .SetEase(Ease.InOutSine);
+        }
+        else
+        {
+            // Optional: stop flicker and hide if Logic chip is back
+            controllersPanel.GetComponent<CanvasGroup>()?.DOKill();
+            controllersPanel.SetActive(false);
+        }
+
+        if (!hasVision)
+        {
+            Debug.LogWarning("Missing Vision chip – apply blindness/dark effect.");
+            // TODO: Darken screen or limit vision
+        }
+
+        if (!hasJump)
+        {
+            Debug.LogWarning("Missing Jump chip – disable jumping.");
+            // TODO: Disable jump input
+        }
+
+        if (!hasShield)
+        {
+            Debug.Log("No shield – player vulnerable.");
+            // Optional effect
+        }
+    }
+
 
 
 
