@@ -166,6 +166,7 @@ namespace StarterAssets
 
         [Header("VFX")]
         [SerializeField] ParticleSystem dash_VFX;
+        [SerializeField] ParticleSystem death_VFX;
 
         private bool IsCurrentDeviceMouse
         {
@@ -302,8 +303,8 @@ namespace StarterAssets
             bool isSprinting = Input.GetKey(sprint_KeyCode);
             bool isMoving = Input.GetKey(moveLeft_KeyCode) || Input.GetKey(moveRight_KeyCode);
 
-            Debug.Log($"prevDirection: {prevDirection}");
-            Debug.Log($"directionValue: {directionValue}");
+            // Debug.Log($"prevDirection: {prevDirection}");
+            // Debug.Log($"directionValue: {directionValue}");
 
             if(isMoving)
             {
@@ -504,6 +505,7 @@ namespace StarterAssets
 
                 if (dashCooldownTimer <= 0f)
                 {
+                    dashLimit = has_Dash;
                     float yAngle = transform.eulerAngles.y;
                     float tolerance = 10f; // adjust as needed
 
@@ -527,7 +529,7 @@ namespace StarterAssets
                 {
                     KeyCode keyPressed = Input.GetKeyDown(moveLeft_KeyCode) ? moveLeft_KeyCode : moveRight_KeyCode;
 
-                    if(canDash && (lastKeyPressed == keyPressed))
+                    if(canDash || dashLimit > 0 && (lastKeyPressed == keyPressed))
                     {
                         if (Time.time - lastKeyPressTime <= doublePressThreshold)
                         {
@@ -550,11 +552,11 @@ namespace StarterAssets
 
         void StartDash()
         {
+            dashLimit--;
+
             dash_VFX.Play();
             isDashing = true;
             dashTimer = dashDuration;
-
-            dashLimit--;
 
             // Use movement direction if available, otherwise forward
             Vector3 inputDir = new Vector3(_input.move.x, 0, _input.move.y).normalized;
@@ -648,6 +650,7 @@ namespace StarterAssets
             }
 
             jumpLimit           = has_Jump;
+            dashLimit           = has_Dash;
 
             foreach(Shield shield in shieldList)
             {
@@ -712,8 +715,10 @@ namespace StarterAssets
         {
             canPlay = false;
 
-            _animator.Play("Shutdown");
+            _animator.Play("Close");
+
             // Play explosion VFX and SFX
+            death_VFX.Play();
 
             yield return new WaitForSeconds(2);
 
