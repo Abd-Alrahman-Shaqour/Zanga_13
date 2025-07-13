@@ -17,9 +17,10 @@ public class Damaging : MonoBehaviour
     
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player" && !isRecharging)
+        if (other.tag == "Player" && other.GetComponent<Damageable>() && !isRecharging)
         {
             other.GetComponent<Damageable>()?.TakeDamage();
+            
             StartCoroutine(ScaleDownAndRecharge());
         }
     }
