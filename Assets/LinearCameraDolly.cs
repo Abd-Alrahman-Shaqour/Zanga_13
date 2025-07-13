@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
+using StarterAssets;
 
 public class LinearCameraDolly : MonoBehaviour
 {
@@ -35,7 +36,10 @@ public class LinearCameraDolly : MonoBehaviour
     private bool isReversed = false;
     private Vector3 startPosition;
     private Quaternion startRotation;
-    
+
+    [SerializeField] ThirdPersonController_RobotSphere thirdPersonController_RobotSphere;
+
+
     void Start()
     {
         // Store initial position and rotation
@@ -90,6 +94,8 @@ public class LinearCameraDolly : MonoBehaviour
         if (!isMoving)
         {
             StartCoroutine(MoveThroughWaypoints());
+            thirdPersonController_RobotSphere.canPlay = false;
+
         }
     }
     
@@ -102,6 +108,8 @@ public class LinearCameraDolly : MonoBehaviour
         if (returnToMainCamera)
         {
             ReturnToMainCamera();
+            thirdPersonController_RobotSphere.canPlay = true;
+
         }
     }
     

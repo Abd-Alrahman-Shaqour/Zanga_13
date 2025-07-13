@@ -37,7 +37,7 @@ public class ChipManager : MonoBehaviour
     public List<Chip> equippedChips;
 
     [Header("Controllers UI")]
-    [SerializeField] GameObject controllersPanel;
+    [SerializeField] GameObject controllersPanel, damageControllersPanel;
 
 
     public void EquipChip(Chip chip)
@@ -69,9 +69,9 @@ public class ChipManager : MonoBehaviour
         if (!hasLogic)
         {
             Debug.LogWarning("Missing Logic chip � scramble controls.");
-            controllersPanel.SetActive(true);
+            damageControllersPanel.SetActive(true);
 
-            var cg = controllersPanel.GetComponent<CanvasGroup>();
+            var cg = damageControllersPanel.GetComponent<CanvasGroup>();
             cg.DOKill(); // Stop any existing tweens
             cg.alpha = 1;
 
@@ -81,9 +81,11 @@ public class ChipManager : MonoBehaviour
         }
         else
         {
+            controllersPanel.SetActive(true);
+
             // Optional: stop flicker and hide if Logic chip is back
-            controllersPanel.GetComponent<CanvasGroup>()?.DOKill();
-            controllersPanel.SetActive(false);
+            damageControllersPanel.GetComponent<CanvasGroup>()?.DOKill();
+            damageControllersPanel.SetActive(false);
         }
 
         if (!hasVision)
