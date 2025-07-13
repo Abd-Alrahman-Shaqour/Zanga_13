@@ -251,6 +251,39 @@ public class AudioManager : MonoBehaviour
         return PlayerPrefs.GetInt(MUSIC_SETTINGS_KEY, 1) == 1 ? true : false;
     }
 
+    public void PlayWalk()
+    {
+        int count = SFX_AudioElements.Where(x => x.audioName.Contains("walk")).Count();
+
+        PlaySFX("Walk_" + UnityEngine.Random.Range(0, count), 0.5f, true);
+    }
+
+    public Coroutine BGMCoroutine = null;
+
+    public void PlayBGMMusicForStages(string _stageName)
+    {
+        if(BGMCoroutine != null)
+        {
+            StopCoroutine(BGMCoroutine);
+            BGMCoroutine = null;
+        }
+
+        BGMCoroutine = StartCoroutine(PlayBGM_Stages(_stageName));
+    }
+
+    public IEnumerator PlayBGM_Stages(string _stageName)
+    {
+        int count = BGM_AudioElements.Where(x => x.audioName.Contains(_stageName)).Count();
+
+        for(int i = 0; i < count; i++)
+        {
+            PlayMusic(_stageName + i, true);
+            yield return new WaitForSeconds(BGM_AudioSource.clip.length);
+        }
+
+        PlayBGMMusicForStages(_stageName);
+    }
+
     [Serializable]
     public class AudioElement
     {

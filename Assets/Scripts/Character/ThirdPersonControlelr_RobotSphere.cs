@@ -308,6 +308,15 @@ namespace StarterAssets
 
             if(isMoving)
             {
+                if(isSprinting)
+                {
+                    AudioManager.Instance?.PlaySFX("Roll", 1);
+                }
+                else
+                {
+                    AudioManager.Instance?.PlaySFX("Walk", 1);
+                }
+
                 directionValue = Input.GetKey(moveLeft_KeyCode) ? -1 : 1;
 
                 if(prevDirection != directionValue)
@@ -321,6 +330,7 @@ namespace StarterAssets
             else
             {
                 directionValue = 0;
+                SprintAcceleration = 0.01f + has_Overclocking * 0.01f * 2;
             }
 
             Vector2 moveAxis = new Vector2(isMoving ? directionValue : 0, 0);
@@ -407,6 +417,9 @@ namespace StarterAssets
 
             if(canJump)
             {
+                // SFX
+                AudioManager.Instance?.PlaySFX("Jump", 1, true);
+
                 // Jump
                 if (_jumpTimeoutDelta <= 0.0f)
                 {
@@ -729,6 +742,7 @@ namespace StarterAssets
 
         public void TakeDamage()
         {
+            AudioManager.Instance.PlaySFX("Damage", 1, true);
             if(has_Shield > 0)
             {
                 shieldList[has_Shield - 1].BreakShield();

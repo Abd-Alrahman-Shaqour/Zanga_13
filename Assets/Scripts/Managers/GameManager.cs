@@ -99,13 +99,13 @@ public class GameManager : SingletonPersistent<GameManager>
         else if (scene.name == "Stage1")
         {
             UpdateGameState(GameState.Stage1);
-            //AudioManager.Instance.PlayMusic("MainMenu_BGM");
+            AudioManager.Instance?.PlayBGM_Stages(GameState.Stage1.ToString());
         }
 
         else if (scene.name == "Stage2")
         {
             UpdateGameState(GameState.Stage2);
-            //AudioManager.Instance.PlayMusic("MainMenu_BGM");
+            AudioManager.Instance?.PlayBGM_Stages(GameState.Stage2.ToString());
         }
 
     }

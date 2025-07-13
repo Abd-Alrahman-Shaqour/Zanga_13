@@ -326,8 +326,6 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: 58c50fa09cbd34725a9c31588d366841, type: 3}
   - audioName: Land
     audioClip: {fileID: 0}
-  - audioName: Walk
-    audioClip: {fileID: 0}
   - audioName: Run
     audioClip: {fileID: 0}
   - audioName: Shield On
@@ -348,6 +346,12 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: 879ff694b635948b28c065afcdb03220, type: 3}
   - audioName: Error for no logic
     audioClip: {fileID: 8300000, guid: 0fe1eed0fc9684b95aa6e7902900713d, type: 3}
+  - audioName: Walk_1
+    audioClip: {fileID: 8300000, guid: 39af8ae8fea2a114a949dd1f219d3583, type: 3}
+  - audioName: Walk_2
+    audioClip: {fileID: 8300000, guid: 6b833e49ae6e8b8449dc8b4e37a9a67e, type: 3}
+  - audioName: Walk_3
+    audioClip: {fileID: 8300000, guid: 39af8ae8fea2a114a949dd1f219d3583, type: 3}
   isBGMTransitioning: 0
   transitionDuration: 1
   maxVolume: 1
