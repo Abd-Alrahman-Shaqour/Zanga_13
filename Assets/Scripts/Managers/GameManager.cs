@@ -96,6 +96,18 @@ public class GameManager : SingletonPersistent<GameManager>
             AudioManager.Instance.PlayMusic("MainMenu_BGM");
         }
 
+        else if (scene.name == "Stage1")
+        {
+            UpdateGameState(GameState.Stage1);
+            //AudioManager.Instance.PlayMusic("MainMenu_BGM");
+        }
+
+        else if (scene.name == "Stage2")
+        {
+            UpdateGameState(GameState.Stage2);
+            //AudioManager.Instance.PlayMusic("MainMenu_BGM");
+        }
+
     }
 
     private void OnSceneUnloaded(Scene scene)
@@ -111,6 +123,8 @@ public enum GameState
 {
     Init,
     MainMenu,
+    Stage1,
+    Stage2,
     Paused,
     GamePlay,
     GameOver
