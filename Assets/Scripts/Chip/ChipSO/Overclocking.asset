@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partName: Overclock
   description: Enhances all your chips
-  icon: {fileID: 21300000, guid: 257d838809630424c815a1f775a3261f, type: 3}
+  icon: {fileID: 21300000, guid: 43f8bdfdca1975d4e8691321e3d645ea, type: 3}
   chipType: 6
   rarityType: 3
   value: 1

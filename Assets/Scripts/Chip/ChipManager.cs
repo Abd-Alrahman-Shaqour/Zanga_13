@@ -33,8 +33,8 @@ public class ChipManager : MonoBehaviour
 
     public void EquipChip(Chip chip)
     {
-        if (!equippedChips.Contains(chip))
-            equippedChips.Add(chip);
+        equippedChips.Add(chip);
+        Debug.LogError(chip.partName);
     }
 
     public void RemoveChip(Chip chip)

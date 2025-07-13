@@ -1,5 +1,6 @@
 ﻿using DG.Tweening;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ChipStationUI : MonoBehaviour
@@ -58,7 +59,16 @@ public class ChipStationUI : MonoBehaviour
 
     public void OnChipUIClicked(ChipUI chipUI, Chip chip)
     {
-        bool isPlayerSide = IsPlayerChip(chip);
+        bool isPlayerSide = IsPlayerChip(chipUI);
+
+        // ✅ Auto-equip from available if there's room and no chip selected yet
+        if (!isPlayerSide && selectedChip == null && playerChipManager.equippedChips.Count < playerChipSlots.Count)
+        {
+            playerChipManager.EquipChip(chip);
+            availableChips.Remove(chip);
+            PopulateChips();
+            return;
+        }
 
         if (selectedChip == null)
         {
@@ -72,8 +82,10 @@ public class ChipStationUI : MonoBehaviour
         {
             bool clickedSameSide = (selectedChipSource == (isPlayerSide ? ChipSource.Player : ChipSource.Available));
 
+
             if (!clickedSameSide)
             {
+                Debug.LogError("swap");
                 // SWAP the chips visually & logically
                 SwapWithEffect(selectedChip, chip, selectedUI, chipUI);
             }
@@ -134,6 +146,8 @@ public class ChipStationUI : MonoBehaviour
         });
     }
 
-
-    bool IsPlayerChip(Chip chip) => playerChipManager.equippedChips.Contains(chip);
+    bool IsPlayerChip(ChipUI ui)
+    {
+        return playerChipSlots.Any(slot => ui.transform.parent == slot);
+    }
 }

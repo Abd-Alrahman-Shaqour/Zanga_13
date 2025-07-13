@@ -20,6 +20,8 @@ public class IntroController : MonoBehaviour
     //[SerializeField] List<Chip> initialChips;
     [SerializeField]ChipManager chipManager;
 
+    [SerializeField] GameObject movementControllerPanel;
+
 
     void Awake()
     {
@@ -43,10 +45,10 @@ public class IntroController : MonoBehaviour
         {
             displayText.text = message;
 
-            yield return StartCoroutine(FadeCanvasGroup(canvasGroup, 0, 1, fadeDuration));
+            yield return StartCoroutine(FadeCanvasGroup(displayText.GetComponent<CanvasGroup>(), 0, 1, fadeDuration));
             yield return new WaitForSeconds(messageDuration);
 
-            yield return StartCoroutine(FadeCanvasGroup(canvasGroup, 1, 0, fadeDuration));
+            yield return StartCoroutine(FadeCanvasGroup(displayText.GetComponent<CanvasGroup>(), 1, 0, fadeDuration));
         }
 
         displayText.text = "";
@@ -76,10 +78,13 @@ public class IntroController : MonoBehaviour
     }
     IEnumerator RevealChipsSequence()
     {
-        introPanel.SetActive(false);
+        //introPanel.SetActive(false);
+        displayText.gameObject.SetActive(false);
+        continueText.gameObject.SetActive(false);
         chipsPanel.SetActive(true);
 
-        canvasGroup.alpha = 0;
+        chipsPanel.GetComponent<CanvasGroup>().alpha = 0f;
+        //canvasGroup.alpha = 0;
 
         List<Chip> chipsToEquip = new List<Chip>(chipStationUI.availableChips);
 
@@ -87,7 +92,7 @@ public class IntroController : MonoBehaviour
 
         // 1. Initial fade in (empty message, panel visible)
         displayText.text = "";
-        yield return StartCoroutine(FadeCanvasGroup(canvasGroup, 0, 1, fadeDuration));
+        yield return StartCoroutine(FadeCanvasGroup(chipsPanel.GetComponent<CanvasGroup>(), 0, 1, fadeDuration));
 
         // 2. Install each chip during fade-ins (no fade-out)
         foreach (var chip in chipsToEquip)
@@ -95,14 +100,20 @@ public class IntroController : MonoBehaviour
             displayText.text = $"Installing: {chip.partName}";
 
             // Start fading in again (non-blocking)
-            StartCoroutine(FadeCanvasGroup(canvasGroup, 0, 1, fadeDuration));
+            StartCoroutine(FadeCanvasGroup(chipsPanel.GetComponent<CanvasGroup>(), 0, 1, fadeDuration));
 
             // Equip chip while fading in
             chipManager.EquipChip(chip);
             chipStationUI.availableChips.Remove(chip);
             chipStationUI.PopulateChips();
+            introPanel.SetActive(false);
 
-            yield return new WaitForSeconds(fadeDuration + 0.5f);
+            if (chip.partName.Contains("Logic"))
+            {
+                movementControllerPanel.SetActive(true);
+            }
+
+            yield return new WaitForSeconds(fadeDuration + 2f);
         }
 
         displayText.text = "";

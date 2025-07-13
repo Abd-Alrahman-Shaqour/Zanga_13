@@ -1022,7 +1022,7 @@ MonoBehaviour:
   chipName: {fileID: 0}
   chipDescription: {fileID: 0}
   selectedFrame: {fileID: 97469302215247149}
-  chipData: {fileID: 11400000, guid: 2014355ce6850a746983fa776763c8d2, type: 2}
+  chipData: {fileID: 0}
   colors:
   - {r: 0.21176471, g: 0.5176471, b: 0.25882354, a: 1}
   - {r: 0.25490198, g: 0.56078434, b: 0.7176471, a: 1}

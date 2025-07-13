@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partName: Vertical Agility
   description: Your ability to jump
-  icon: {fileID: 21300000, guid: f3c77e6ba9c72714b83bba7482d53d1a, type: 3}
+  icon: {fileID: 21300000, guid: 95f3e03b5a7b5eb4c9e2aba29fe6f5e6, type: 3}
   chipType: 3
   rarityType: 0
   value: 1
