@@ -253,9 +253,9 @@ public class AudioManager : MonoBehaviour
 
     public void PlayWalk()
     {
-        int count = SFX_AudioElements.Where(x => x.audioName.Contains("walk")).Count();
+        int count = SFX_AudioElements.Where(x => x.audioName.Contains("Walk")).Count();
 
-        PlaySFX("Walk_" + UnityEngine.Random.Range(0, count), 0.5f, true);
+        PlaySFX("Walk_" + UnityEngine.Random.Range(1, count), 0.35f, true);
     }
 
     public Coroutine BGMCoroutine = null;

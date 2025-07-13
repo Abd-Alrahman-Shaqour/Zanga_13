@@ -295,6 +295,8 @@ public class LinearCameraDolly : MonoBehaviour
         {
             SetOtherCameraPriorities(inactivePriority, mainVirtualCamera);
         }
+
+        thirdPersonController_RobotSphere.canPlay = true;
     }
     
     private void SetVirtualCameraActive(bool active)

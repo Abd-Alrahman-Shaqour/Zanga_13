@@ -44,6 +44,12 @@ public class GameManager : SingletonPersistent<GameManager>
                 break;
             case GameState.GameOver:
                 break;
+            case GameState.Stage1:
+                Time.timeScale = 1f;
+                break;
+            case GameState.Stage2:
+                Time.timeScale = 1f;
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(newState), newState, null);
         }
@@ -99,13 +105,13 @@ public class GameManager : SingletonPersistent<GameManager>
         else if (scene.name == "Stage1")
         {
             UpdateGameState(GameState.Stage1);
-            AudioManager.Instance?.PlayBGM_Stages(GameState.Stage1.ToString());
+            AudioManager.Instance?.PlayMusic("Stage1_1");
         }
 
         else if (scene.name == "Stage2")
         {
             UpdateGameState(GameState.Stage2);
-            AudioManager.Instance?.PlayBGM_Stages(GameState.Stage2.ToString());
+            AudioManager.Instance?.PlayMusic("Stage2_1");
         }
 
     }

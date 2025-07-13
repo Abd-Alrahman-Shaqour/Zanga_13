@@ -19,7 +19,7 @@ public class Damaging : MonoBehaviour
     {
         if (other.tag == "Player" && !isRecharging)
         {
-            other.GetComponent<Damageable>().TakeDamage();
+            other.GetComponent<Damageable>()?.TakeDamage();
             StartCoroutine(ScaleDownAndRecharge());
         }
     }

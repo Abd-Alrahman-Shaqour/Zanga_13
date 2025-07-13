@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using MoreMountains.Feedbacks;
 using System.Collections;
+using StarterAssets;
 
 public class CheckpointManager : MonoBehaviour
 {
@@ -107,6 +108,8 @@ public class CheckpointManager : MonoBehaviour
         {
             player.SetActive(true);
         }
+
+        player.GetComponent<ThirdPersonController_RobotSphere>()?.Reset();
         
         isRespawning = false;
     }

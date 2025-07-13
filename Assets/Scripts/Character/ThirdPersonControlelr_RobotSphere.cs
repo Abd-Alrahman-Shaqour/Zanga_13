@@ -224,6 +224,8 @@ namespace StarterAssets
         {
             _hasAnimator = _animator != null;
 
+            JumpAndGravity();
+
             if(!canPlay)
             {
                 return;
@@ -237,7 +239,6 @@ namespace StarterAssets
             HandleDash();
 
             GroundedCheck();
-            JumpAndGravity();
             Move();
         }
 
@@ -321,7 +322,7 @@ namespace StarterAssets
 
                 if(prevDirection != directionValue)
                 {
-                    Debug.LogError($"prevDirection != directionValue");
+                    // Debug.LogError($"prevDirection != directionValue");
                     SprintAcceleration = 0.01f + has_Overclocking * 0.01f * 2;
                 }
 
@@ -643,6 +644,11 @@ namespace StarterAssets
 
         public void ActivateChips()
         {
+            if(has_OS == 0 && has_Overclocking == 0)
+            {
+                StartCoroutine(Suicide());
+            }
+
             // Assign overclocking effect
             if(has_Overclocking > 0)
             {
@@ -711,6 +717,11 @@ namespace StarterAssets
             canPlay = true;
         }
 
+        public void Reset()
+        {
+            StartCoroutine(Open());
+        }
+
         public IEnumerator Suicide()
         {
             canPlay = false;
@@ -736,13 +747,13 @@ namespace StarterAssets
             yield return new WaitForSeconds(2);
 
             yield return null;
-             CheckpointManager.Instance.OnPlayerDeath();
+            CheckpointManager.Instance?.OnPlayerDeath();
             // Death sequence, replay from next checkpoint
         }
 
         public void TakeDamage()
         {
-            AudioManager.Instance.PlaySFX("Damage", 1, true);
+            AudioManager.Instance?.PlaySFX("Damage", 1, true);
             if(has_Shield > 0)
             {
                 shieldList[has_Shield - 1].BreakShield();

@@ -1319,6 +1319,56 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5316727019600203873, guid: b1c9f72f2fefe444c8d4b12978d30b3f,
+        type: 3}
+      propertyPath: BGM_AudioElements.Array.size
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 5316727019600203873, guid: b1c9f72f2fefe444c8d4b12978d30b3f,
+        type: 3}
+      propertyPath: BGM_AudioElements.Array.data[3].audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: af03c500989779a47a89cf2f26cb517a, type: 3}
+    - target: {fileID: 5316727019600203873, guid: b1c9f72f2fefe444c8d4b12978d30b3f,
+        type: 3}
+      propertyPath: BGM_AudioElements.Array.data[5].audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: fa3ba438d8cf89e42bd7d1eec9d35397, type: 3}
+    - target: {fileID: 5316727019600203873, guid: b1c9f72f2fefe444c8d4b12978d30b3f,
+        type: 3}
+      propertyPath: BGM_AudioElements.Array.data[5].audioName
+      value: Stage2_2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5316727019600203873, guid: b1c9f72f2fefe444c8d4b12978d30b3f,
+        type: 3}
+      propertyPath: BGM_AudioElements.Array.data[6].audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 38be165a11f9f6848919ac75a3398ff1, type: 3}
+    - target: {fileID: 5316727019600203873, guid: b1c9f72f2fefe444c8d4b12978d30b3f,
+        type: 3}
+      propertyPath: BGM_AudioElements.Array.data[6].audioName
+      value: Stage2_3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5316727019600203873, guid: b1c9f72f2fefe444c8d4b12978d30b3f,
+        type: 3}
+      propertyPath: BGM_AudioElements.Array.data[7].audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 59a8de50856b69c4db12d78d52cf6393, type: 3}
+    - target: {fileID: 5316727019600203873, guid: b1c9f72f2fefe444c8d4b12978d30b3f,
+        type: 3}
+      propertyPath: BGM_AudioElements.Array.data[7].audioName
+      value: Intro
+      objectReference: {fileID: 0}
+    - target: {fileID: 5316727019600203873, guid: b1c9f72f2fefe444c8d4b12978d30b3f,
+        type: 3}
+      propertyPath: BGM_AudioElements.Array.data[8].audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 678e4ac3219e18a46b9014c297ef887c, type: 3}
+    - target: {fileID: 5316727019600203873, guid: b1c9f72f2fefe444c8d4b12978d30b3f,
+        type: 3}
+      propertyPath: BGM_AudioElements.Array.data[8].audioName
+      value: Outro
+      objectReference: {fileID: 0}
     - target: {fileID: 8275617386735030454, guid: b1c9f72f2fefe444c8d4b12978d30b3f,
         type: 3}
       propertyPath: m_Name
