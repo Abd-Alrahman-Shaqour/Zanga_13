@@ -1,8 +1,12 @@
+using System.Collections;
 using System.Collections.Generic;
+
 using System.Linq;
+
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
+
 #endif
 
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
@@ -17,6 +21,8 @@ namespace StarterAssets
     public class ThirdPersonController_RobotSphere : MonoBehaviour
     {
         [Header("Player")]
+        public bool canPlay = false;
+
         [Tooltip("Move speed of the character in m/s")]
         public float MoveSpeed = 2.0f;
 
@@ -82,6 +88,8 @@ namespace StarterAssets
         private float _cinemachineTargetPitch;
 
         // player
+        int  directionValue = 0;
+        private int prevDirection = 0;
         private float _speed;
         private float _animationBlend;
         private float _targetRotation = 0.0f;
@@ -118,29 +126,41 @@ namespace StarterAssets
         public int jumpCount = 0;
         public int jumpLimit = 1;
 
-        // [Header("Dash Settings")]
-        // public float dashForce = 10f;
-        // public float dashDuration = 0.2f;
-        // public float dashCooldown = 1f;
-        // public bool canDash = true;
+        [Header("Dash Settings")]
+        bool dashUsed = false;
+        public float dashForce = 10f;
+        public float dashDuration = 0.2f;
+        public float dashCooldown = 1f;
+        public bool canDash = true;
 
-        // private bool isDashing = false;
-        // private float dashTimer;
-        // private float dashCooldownTimer;
-        // private Vector3 dashDirection;
+        private bool isDashing = false;
+        private float dashTimer;
+        private float dashCooldownTimer;
+        private Vector3 dashDirection;
+
+        public float doublePressThreshold = 0.3f;
+        private float lastKeyPressTime = -1f;
+        private KeyCode lastKeyPressed = KeyCode.None;
 
         [Header("Shield abilities")]
-        [SerializeField] List<GameObject> shield_GoList;
+        [SerializeField] List<Shield> shieldList;
 
         [Header("Main Chip abilities")]
-        [SerializeField] int has_OS = 0;
-        [SerializeField] int has_Jump = 0;
-        [SerializeField] int has_Vision = 0;
-        [SerializeField] int has_Shield = 0;
-        [SerializeField] int has_Logic = 0;
+        public int has_OS = 0;
+        public int has_Jump = 0;
+        public int has_Vision = 0;
+        public int has_Shield = 0;
+        public int has_Logic = 0;
+        public int has_Dash = 0;
 
         [Header("Other Chip abilities")]
         [SerializeField] int has_Overclocking = 0;
+
+        [Header("Other Chip abilities")]
+        [SerializeField] KeyCode jump_KeyCode = KeyCode.Space;
+        [SerializeField] KeyCode sprint_KeyCode = KeyCode.LeftShift;
+        [SerializeField] KeyCode moveLeft_KeyCode = KeyCode.A;
+        [SerializeField] KeyCode moveRight_KeyCode = KeyCode.D;
 
         private bool IsCurrentDeviceMouse
         {
@@ -181,18 +201,27 @@ namespace StarterAssets
             // reset our timeouts on start
             _jumpTimeoutDelta = JumpTimeout;
             _fallTimeoutDelta = FallTimeout;
+
+            StartCoroutine(Open());
         }
+
+        List<KeyCode> inputList = new List<KeyCode>();
 
         private void Update()
         {
             _hasAnimator = _animator != null;
 
+            if(!canPlay)
+            {
+                return;
+            }
+
             // Handle jump input before checking grounded state
-            if(Input.GetKeyDown(KeyCode.Space))
+            if(Input.GetKeyDown(jump_KeyCode))
                 Jump();
 
-            // if (Input.GetKeyDown(KeyCode.LeftShift))
-            //     TryDash();
+            
+            HandleDash();
 
             GroundedCheck();
             JumpAndGravity();
@@ -201,7 +230,7 @@ namespace StarterAssets
 
         private void LateUpdate()
         {
-            CameraRotation();
+            // CameraRotation();
         }
 
         private void AssignAnimationIDs()
@@ -235,31 +264,56 @@ namespace StarterAssets
 
         private void CameraRotation()
         {
-            // if there is an input and camera position is not fixed
-            if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
-            {
-                //Don't multiply mouse input by Time.deltaTime;
-                float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
+            // // if there is an input and camera position is not fixed
+            // if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
+            // {
+            //     //Don't multiply mouse input by Time.deltaTime;
+            //     float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
 
-                _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
-                _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
-            }
+            //     _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
+            //     _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
+            // }
 
-            // clamp our rotations so our values are limited 360 degrees
-            _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
-            _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
+            // // clamp our rotations so our values are limited 360 degrees
+            // _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
+            // _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
 
-            // Cinemachine will follow this target
-            CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
-                _cinemachineTargetYaw, 0.0f);
+            // // Cinemachine will follow this target
+            // CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
+            //     _cinemachineTargetYaw, 0.0f);
         }
 
         public float SprintAcceleration = 0.01f;
 
         private void Move()
         {
+            bool isSprinting = Input.GetKey(sprint_KeyCode);
+            bool isMoving = Input.GetKey(moveLeft_KeyCode) || Input.GetKey(moveRight_KeyCode);
+
+            Debug.Log($"prevDirection: {prevDirection}");
+            Debug.Log($"directionValue: {directionValue}");
+
+            if(isMoving)
+            {
+                directionValue = Input.GetKey(moveLeft_KeyCode) ? -1 : 1;
+
+                if(prevDirection != directionValue)
+                {
+                    Debug.LogError($"prevDirection != directionValue");
+                    SprintAcceleration = 0.01f + has_Overclocking * 0.01f * 2;
+                }
+
+                prevDirection = directionValue;
+            }
+            else
+            {
+                directionValue = 0;
+            }
+
+            Vector2 moveAxis = new Vector2(isMoving ? directionValue : 0, 0);
+            
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
-            if(_input.sprint)
+            if(isSprinting)
             {
                 SprintAcceleration += 0.01f + has_Overclocking * 0.01f * 2;
             }
@@ -269,17 +323,17 @@ namespace StarterAssets
             }
 
             // set target speed based on move speed, sprint speed and if sprint is pressed
-            float targetSpeed = _input.sprint ? SprintSpeed + (has_Overclocking * SprintSpeed * 1.5f) + SprintAcceleration : MoveSpeed + (has_Overclocking * MoveSpeed * 2);
+            float targetSpeed = isSprinting ? SprintSpeed + (has_Overclocking * SprintSpeed * 1.5f) + SprintAcceleration : MoveSpeed + (has_Overclocking * MoveSpeed * 2);
 
             // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is no input, set the target speed to 0
-            if (_input.move == Vector2.zero) targetSpeed = 0.0f;
+            if (moveAxis == Vector2.zero) targetSpeed = 0.0f;
 
             // a reference to the players current horizontal velocity
             float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
 
             float speedOffset = 0.1f;
-            float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
+            float inputMagnitude = _input.analogMovement ? moveAxis.magnitude : 1f;
 
             // accelerate or decelerate to target speed
             if (currentHorizontalSpeed < targetSpeed - speedOffset ||
@@ -302,27 +356,32 @@ namespace StarterAssets
             if (_animationBlend < 0.01f) _animationBlend = 0f;
 
             // normalise input direction
-            Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
+            Vector3 inputDirection = new Vector3(moveAxis.x, 0.0f, moveAxis.y).normalized;
 
             // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is a move input rotate player when the player is moving
-            if (_input.move != Vector2.zero)
+            if (moveAxis != Vector2.zero)
             {
                 _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
                                   _mainCamera.transform.eulerAngles.y;
+
+                Debug.Log($"_targetRotation: {_targetRotation}");
+                Debug.Log($"transform.eulerAngles.y: {transform.eulerAngles.y}");
                                   
                 float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
                     RotationSmoothTime);
-
+            
                 // rotate to face input direction relative to camera position
                 transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
             }
 
             Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
 
-            // move the player
-            _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
-                             new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+            Vector3 move = isDashing
+                ? dashDirection * dashForce 
+                : targetDirection.normalized * (_speed);
+
+            _controller.Move(move * Time.deltaTime + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
 
             // update animator if using character
             if (_hasAnimator)
@@ -413,6 +472,92 @@ namespace StarterAssets
             }
         }
 
+        void HandleDash()
+        {
+            if (isDashing)
+            {
+                dashTimer -= Time.deltaTime;
+                if (dashTimer <= 0f)
+                {
+                    isDashing = false;
+                    canDash = false;
+                    dashCooldownTimer = dashCooldown;
+                }
+            }
+            else
+            {
+                if (dashCooldownTimer > 0f)
+                {
+                    dashCooldownTimer -= Time.deltaTime;
+                }
+
+                if (dashCooldownTimer <= 0f)
+                {
+                    float yAngle = transform.eulerAngles.y;
+                    float tolerance = 10f; // adjust as needed
+
+                    if (Mathf.Abs(Mathf.DeltaAngle(yAngle, 90f)) <= tolerance)
+                    {
+                        // Angle is close to 90 degrees
+                        canDash = true;
+                    }
+                    else if (Mathf.Abs(Mathf.DeltaAngle(yAngle, 270f)) <= tolerance)
+                    {
+                        // Angle is close to 270 degrees
+                        canDash = true;
+                    }
+                    else
+                    {
+                        canDash = false;
+                    }
+                }
+
+                if(Input.GetKeyDown(moveLeft_KeyCode) || Input.GetKeyDown(moveRight_KeyCode))
+                {
+                    KeyCode keyPressed = Input.GetKeyDown(moveLeft_KeyCode) ? moveLeft_KeyCode : moveRight_KeyCode;
+
+                    if(canDash && (lastKeyPressed == keyPressed))
+                    {
+                        if (Time.time - lastKeyPressTime <= doublePressThreshold)
+                        {
+                            Debug.Log("Double press detected!");
+                            // Reset to avoid triple-press being detected as second double-press
+                            lastKeyPressTime = -1f;
+
+                            StartDash();
+                        }
+                        else
+                        {
+                            lastKeyPressTime = Time.time;
+                        }
+                    }
+
+                    lastKeyPressed = Input.GetKeyDown(moveLeft_KeyCode) ? moveLeft_KeyCode : moveRight_KeyCode;
+                }
+            }
+        }
+
+        void StartDash()
+        {
+            isDashing = true;
+            dashTimer = dashDuration;
+
+            // Use movement direction if available, otherwise forward
+            Vector3 inputDir = new Vector3(_input.move.x, 0, _input.move.y).normalized;
+
+            if (inputDir.sqrMagnitude > 0.1f)
+            {
+                dashDirection = Quaternion.Euler(0f, _mainCamera.transform.eulerAngles.y, 0f) * inputDir;
+            }
+            else
+            {
+                dashDirection = transform.forward;
+            }
+
+            // Optional: cancel vertical velocity while dashing
+            _verticalVelocity = 0f;
+        }
+
         private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
         {
             if (lfAngle < -360f) lfAngle += 360f;
@@ -462,30 +607,106 @@ namespace StarterAssets
             has_Shield          = _chipList.Where(chip => chip.chipType == ChipType.Shield).Count();
             has_Logic           = _chipList.Where(chip => chip.chipType == ChipType.Logic).Count();
             has_Overclocking    = _chipList.Where(chip => chip.chipType == ChipType.Overclock).Count();
+            has_Dash            = _chipList.Where(chip => chip.chipType == ChipType.Dash).Count();
 
             ActivateChips();
         }
 
         public void ActivateChips()
         {
+            // Assign overclocking effect
             if(has_Overclocking > 0)
             {
                 has_Jump        = has_Jump   * (has_Jump + 1);
-                has_Shield      = has_Shield * (has_Shield + 1);    
+                has_Shield      = has_Shield * (has_Shield + 1);
+                has_Dash        = has_Dash   * (has_Dash + 1);
                 has_Logic       = 1;
+            }
+
+            // Assign logic effect
+            if(has_Logic > 0)
+            {
+                ResetKeyCodes();
+            }
+            else
+            {
+                ScrambleKeyCodes();
             }
 
             jumpLimit           = has_Jump;
 
-            foreach(GameObject shield in shield_GoList)
+            foreach(Shield shield in shieldList)
             {
-                shield.SetActive(false);
+                shield.gameObject.SetActive(false);
             }
             
             for(int i = 0; i < has_Shield; i++)
             {
-                shield_GoList[i].SetActive(true);
+                shieldList[i].gameObject.SetActive(true);
             }
+        }
+
+        void ScrambleKeyCodes()
+        {
+            List<KeyCode> shuffleKeys = new List<KeyCode>
+            {
+                jump_KeyCode,
+                sprint_KeyCode,
+                moveLeft_KeyCode,
+                moveRight_KeyCode,
+            };
+
+            shuffleKeys.Shuffle();
+            
+            jump_KeyCode        = shuffleKeys[0];
+            sprint_KeyCode      = shuffleKeys[1];
+            moveLeft_KeyCode    = shuffleKeys[2];
+            moveRight_KeyCode   = shuffleKeys[3];
+        }
+
+        void ResetKeyCodes()
+        {
+            jump_KeyCode = KeyCode.Space;
+            sprint_KeyCode = KeyCode.LeftShift;
+            moveLeft_KeyCode = KeyCode.A;
+            moveRight_KeyCode = KeyCode.D;
+        }
+
+        public IEnumerator Open()
+        {
+            _animator.Play("Open");
+
+            yield return new WaitForSeconds(3);
+
+            canPlay = true;
+        }
+
+        public IEnumerator Suicide()
+        {
+            _animator.Play("Shutdown");
+
+            yield return new WaitForSeconds(2);
+
+            yield return null;
+
+            // Death sequence, replay from next checkpoint
+        }
+    }
+}
+
+public static class ListExtensions
+{
+    public static void Shuffle<T>(this IList<T> list)
+    {
+        System.Random rng = new System.Random(); // You can also use UnityEngine.Random if preferred
+        int n = list.Count;
+        while (n > 1)
+        {
+            n--;
+            int k = rng.Next(n + 1); // 0 <= k <= n
+            T value = list[k];
+            list[k] = list[n];
+            list[n] = value;
         }
     }
 }

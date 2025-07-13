@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partName: Vision
   description: Your ability to see
-  icon: {fileID: 1509648566, guid: 4a1eb2c6be4830849965610c1bed0abf, type: 3}
+  icon: {fileID: 21300000, guid: 8d1fdfd45fda5064d90141f6bff85a35, type: 3}
   chipType: 2
-  rarityType: 1
+  rarityType: 2
   value: 1

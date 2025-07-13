@@ -78,11 +78,11 @@ public enum ChipType
     Logic,
     Shield,
     Overclock,
+    Dash
 }
 
 public enum RarityType
 {
-    Common,
     Uncommon,
     Rare,
     Epic,

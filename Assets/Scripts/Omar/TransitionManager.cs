@@ -33,13 +33,12 @@ public class TransitionManager : MonoBehaviour
         if (SceneManager.GetActiveScene().name == "Init")
         {
             StartCoroutine(DelayBeforeLoad("MainMenu"));
-
         }
     }
 
     private IEnumerator DelayBeforeLoad(string sceneName)
     {
-        yield return new WaitForSeconds(1.5f); // adjust to how long you want the splash to show
+        yield return new WaitForSeconds(2f); // adjust to how long you want the splash to show
         LoadScene(sceneName);
     }
 
@@ -51,7 +50,7 @@ public class TransitionManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         // Automatically fade out after a scene is loaded
-        FadeOut();
+        StartCoroutine(FadeOut());
     }
 
     public void LoadScene(string sceneName)
@@ -74,21 +73,29 @@ public class TransitionManager : MonoBehaviour
         op.allowSceneActivation = true;
     }
 
-    public void FadeOut()
+    public IEnumerator FadeOut()
     {
+        yield return new WaitForSeconds(0.5f);
+
         if (fadeCanvasGroup != null)
         {
+            fadeCanvasGroup.alpha = 1;
             fadeCanvasGroup.blocksRaycasts = false;
+
             fadeCanvasGroup.DOFade(0, fadeDuration).SetEase(Ease.InOutSine).SetUpdate(true);
         }
+
+        yield return new WaitForSeconds(fadeDuration);
     }
 
     private IEnumerator FadeIn()
     {
         if (fadeCanvasGroup != null)
         {
+            fadeCanvasGroup.alpha = 0;
             fadeCanvasGroup.gameObject.SetActive(true);
             fadeCanvasGroup.blocksRaycasts = true;
+
             yield return fadeCanvasGroup.DOFade(1, fadeDuration).SetEase(Ease.InOutSine).SetUpdate(true).WaitForCompletion();
         }
     }

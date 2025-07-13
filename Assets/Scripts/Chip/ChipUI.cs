@@ -3,17 +3,25 @@ using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 
 public class ChipUI : MonoBehaviour , IPointerEnterHandler, IPointerExitHandler
 {
+    public Image BGTint;
     public Image icon;
+    public Image icon_shadow;
     public TextMeshProUGUI chipName;
     public TextMeshProUGUI chipDescription;
+
+    [SerializeField] GameObject selectedFrame;
 
     public Chip chipData;
     private ChipStationUI station;
 
     private Tween shakeTween;
+
+    [SerializeField] List<Color> colors;
 
 
     public void Setup(Chip data, ChipStationUI station)
@@ -21,7 +29,8 @@ public class ChipUI : MonoBehaviour , IPointerEnterHandler, IPointerExitHandler
         this.chipData = data;
         this.station = station;
 
-        icon.sprite = data.icon;
+        icon.sprite = icon_shadow.sprite = data.icon;
+        BGTint.color = colors[(int)chipData.rarityType];
         //chipName.text = data.chipName;
         //chipDescription.text = data.description;
     }
@@ -35,6 +44,7 @@ public class ChipUI : MonoBehaviour , IPointerEnterHandler, IPointerExitHandler
     {
         if (pressed)
         {
+            selectedFrame.gameObject.SetActive(true);
 
             if (shakeTween == null || !shakeTween.IsPlaying())
             {
@@ -49,6 +59,8 @@ public class ChipUI : MonoBehaviour , IPointerEnterHandler, IPointerExitHandler
         }
         else
         {
+            selectedFrame.gameObject.SetActive(false);
+
             shakeTween?.Kill();
             transform.rotation = Quaternion.identity;
         }
