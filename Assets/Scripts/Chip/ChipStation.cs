@@ -18,6 +18,23 @@ public class ChipStation : MonoBehaviour
         avaiableChips = ChipManager.Instance.Get_ChipSOList(availableChipTypes);
     }
 
-#region Getters
-#endregion --- Getters ---
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            Debug.Log("Player entered ChipStation area");
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            Debug.Log("Player exited ChipStation area");
+        }
+    }
+
+
+    #region Getters
+    #endregion --- Getters ---
 }

@@ -138,6 +138,8 @@ namespace StarterAssets
         private float dashCooldownTimer;
         private Vector3 dashDirection;
 
+        [SerializeField] int dashLimit = 0;
+
         public float doublePressThreshold = 0.3f;
         private float lastKeyPressTime = -1f;
         private KeyCode lastKeyPressed = KeyCode.None;
@@ -162,6 +164,9 @@ namespace StarterAssets
         [SerializeField] KeyCode moveLeft_KeyCode = KeyCode.A;
         [SerializeField] KeyCode moveRight_KeyCode = KeyCode.D;
 
+        [Header("VFX")]
+        [SerializeField] ParticleSystem dash_VFX;
+
         private bool IsCurrentDeviceMouse
         {
             get
@@ -174,8 +179,15 @@ namespace StarterAssets
             }
         }
 
+        void ResetVFX()
+        {
+            dash_VFX.Stop();
+        }
+
         private void Awake()
         {
+            ResetVFX();
+
             // get a reference to our main camera
             if (_mainCamera == null)
             {
@@ -365,9 +377,6 @@ namespace StarterAssets
                 _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
                                   _mainCamera.transform.eulerAngles.y;
 
-                Debug.Log($"_targetRotation: {_targetRotation}");
-                Debug.Log($"transform.eulerAngles.y: {transform.eulerAngles.y}");
-                                  
                 float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
                     RotationSmoothTime);
             
@@ -486,6 +495,8 @@ namespace StarterAssets
             }
             else
             {
+                dash_VFX.Stop();
+
                 if (dashCooldownTimer > 0f)
                 {
                     dashCooldownTimer -= Time.deltaTime;
@@ -539,8 +550,11 @@ namespace StarterAssets
 
         void StartDash()
         {
+            dash_VFX.Play();
             isDashing = true;
             dashTimer = dashDuration;
+
+            dashLimit--;
 
             // Use movement direction if available, otherwise forward
             Vector3 inputDir = new Vector3(_input.move.x, 0, _input.move.y).normalized;
@@ -683,6 +697,8 @@ namespace StarterAssets
 
         public IEnumerator Suicide()
         {
+            canPlay = false;
+            
             _animator.Play("Shutdown");
 
             yield return new WaitForSeconds(2);
@@ -690,6 +706,34 @@ namespace StarterAssets
             yield return null;
 
             // Death sequence, replay from next checkpoint
+        }
+
+        public IEnumerator Death()
+        {
+            canPlay = false;
+
+            _animator.Play("Shutdown");
+            // Play explosion VFX and SFX
+
+            yield return new WaitForSeconds(2);
+
+            yield return null;
+
+            // Death sequence, replay from next checkpoint
+        }
+
+        public void TakeDamage()
+        {
+            if(has_Shield > 0)
+            {
+                shieldList[has_Shield - 1].BreakShield();
+
+                has_Shield--;
+            }
+            else
+            {
+                StartCoroutine(Death());
+            }
         }
     }
 }

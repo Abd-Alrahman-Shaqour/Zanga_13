@@ -12,8 +12,6 @@ public class Damageable : MonoBehaviour
     [SerializeField] int health = 1;
     [SerializeField] int shield;
 
-    [SerializeField]
-
     void Awake()
     {
          
@@ -26,21 +24,23 @@ public class Damageable : MonoBehaviour
 
     public void TakeDamage()
     {
-        if(shield > 0)
-        {
-            shield--;
-            return;
-        }
+        robotSphere_controller.TakeDamage();
 
-        if(health > 0)
-        {
-            health--;
+        // if(shield > 0)
+        // {
+        //     shield--;
+        //     return;
+        // }
 
-            if(health <= 0)
-            {
-                // Death
-            }
-        }
+        // if(health > 0)
+        // {
+        //     health--;
+
+        //     if(health <= 0)
+        //     {
+        //         // Death
+        //     }
+        // }
     }
 
     public void PlayerDied()
