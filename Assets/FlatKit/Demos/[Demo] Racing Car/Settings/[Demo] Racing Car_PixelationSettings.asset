@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bf7a6fd37ee46709aa013efc3270aba, type: 3}
   m_Name: '[Demo] Racing Car_PixelationSettings'
   m_EditorClassIdentifier: 
-  resolution: 480
-  renderEvent: 550
-  applyInSceneView: 1
+  resolution: 118
+  renderEvent: 300
+  applyInSceneView: 0
   effectMaterial: {fileID: 3723506462162492137}
 --- !u!21 &3723506462162492137
 Material:
@@ -54,6 +54,6 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _PixelSize: 0.0020833334
+    - _PixelSize: 0.008474576
     m_Colors: []
   m_BuildTextureStacks: []
