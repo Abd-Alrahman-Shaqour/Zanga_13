@@ -43,7 +43,7 @@ public class ChipStation : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            exploreLevelButton.onClick.AddListener(linearCameraDolly.StartDolly);
+            exploreLevelButton.onClick.AddListener(Explore);
 
             canOpenStation = true;
             interactE.SetActive(true);
@@ -65,6 +65,14 @@ public class ChipStation : MonoBehaviour
 
             Debug.LogError("Player exited ChipStation area");
         }
+    }
+
+    void Explore()
+    {
+        interactE.SetActive(false);
+        station.SetActive(false);
+
+        linearCameraDolly.StartDolly();
     }
 
 
