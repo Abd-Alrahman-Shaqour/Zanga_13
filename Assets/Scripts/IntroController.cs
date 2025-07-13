@@ -15,7 +15,7 @@ public class IntroController : MonoBehaviour
 
     private bool canContinue = false;
     [SerializeField] ChipStationUI chipStationUI;
-    [SerializeField] GameObject introPanel,chipsPanel, exitButton;
+    [SerializeField] GameObject introPanel,chips,chipsPanel, exitButton;
     [SerializeField]ChipManager chipManager;
 
 
@@ -79,7 +79,7 @@ public class IntroController : MonoBehaviour
 
         // 1. Initial fade in (empty message, panel visible)
         displayText.text = "";
-        yield return StartCoroutine(FadeCanvasGroup(chipsPanel.GetComponent<CanvasGroup>(), 0, 1, fadeDuration));
+        yield return StartCoroutine(FadeCanvasGroup(chips.GetComponent<CanvasGroup>(), 0, 1, fadeDuration));
 
         // 2. Install each chip during fade-ins (no fade-out)
         foreach (var chip in chipsToEquip)
@@ -87,7 +87,7 @@ public class IntroController : MonoBehaviour
             displayText.text = $"Installing: {chip.partName}";
 
             // Start fading in again (non-blocking)
-            StartCoroutine(FadeCanvasGroup(chipsPanel.GetComponent<CanvasGroup>(), 0, 1, fadeDuration));
+            StartCoroutine(FadeCanvasGroup(chips.GetComponent<CanvasGroup>(), 0, 1, fadeDuration));
 
             // Equip chip while fading in
             chipManager.EquipChip(chip);

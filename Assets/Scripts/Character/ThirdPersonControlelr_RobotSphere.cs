@@ -707,7 +707,7 @@ namespace StarterAssets
             yield return new WaitForSeconds(2);
 
             yield return null;
-
+             CheckpointManager.Instance.OnPlayerDeath();
             // Death sequence, replay from next checkpoint
         }
 
@@ -723,7 +723,7 @@ namespace StarterAssets
             yield return new WaitForSeconds(2);
 
             yield return null;
-
+             CheckpointManager.Instance.OnPlayerDeath();
             // Death sequence, replay from next checkpoint
         }
 
